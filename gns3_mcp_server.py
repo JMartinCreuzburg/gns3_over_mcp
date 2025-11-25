@@ -16,8 +16,6 @@ config = load_config()
 
 mcp = FastMCP(
     name="GNS3 MCP Server",
-    version="0.1.0",
-    description="Control GNS3 network topologies via Model Context Protocol",
 )
 
 
