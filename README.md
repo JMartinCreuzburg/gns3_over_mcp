@@ -77,7 +77,7 @@ Add to `~/.config/Claude/claude_desktop_config.json`:
     "gns3": {
       "command": "python3",
       "args": [
-        "/home/mcj/repos/gns3_over_mcp/gns3_mcp_server.py"
+        "/home/<<user>>/repos/gns3_over_mcp/gns3_mcp_server.py"
       ]
     }
   }
@@ -165,9 +165,15 @@ Stop all nodes and close the project
 
 ```
 gns3_over_mcp/
-├── gns3_mcp_server.py      # Main MCP server with 18 tools
+├── gns3_mcp_server.py      # Main MCP server entry point
 ├── gns3_client.py          # GNS3 REST API client wrapper
 ├── config.py               # Configuration management
+├── tools/                  # Modular tool definitions
+│   ├── __init__.py         # Tool module exports
+│   ├── project_tools.py    # Project management (7 tools)
+│   ├── node_tools.py       # Node operations (7 tools)
+│   ├── link_tools.py       # Link management (3 tools)
+│   └── template_tools.py   # Template operations (1 tool)
 ├── gns3_config.json        # GNS3 connection settings
 ├── .env                    # Environment variables (sensitive data)
 ├── .env.example            # Template for .env
@@ -258,8 +264,14 @@ python3 gns3_mcp_server.py
 ### Adding New Tools
 
 1. Add method to `GNS3Client` in [gns3_client.py](gns3_client.py)
-2. Add `@mcp.tool()` decorated function in [gns3_mcp_server.py](gns3_mcp_server.py)
-3. Update this README with the new tool documentation
+2. Add `@mcp.tool()` decorated function to the appropriate tool module:
+   - [tools/project_tools.py](tools/project_tools.py) for project operations
+   - [tools/node_tools.py](tools/node_tools.py) for node operations
+   - [tools/link_tools.py](tools/link_tools.py) for link operations
+   - [tools/template_tools.py](tools/template_tools.py) for template operations
+   - Or create a new module in `tools/` for new categories
+3. Register the new tool in the module's `register_*_tools()` function
+4. Update this README with the new tool documentation
 
 ## Security Notes
 
@@ -303,7 +315,15 @@ Contributions welcome! Please:
 
 ## Version History
 
+### v0.2.0 (Current)
+
+- Refactored server into modular architecture
+- Tools organized into semantic modules (project, node, link, template)
+- Improved maintainability and extensibility
+- Reduced main server file from 459 to 42 lines
+
 ### v0.1.0 (Initial Release)
+
 - 18 MCP tools for GNS3 control
 - Support for projects, nodes, links, and topology operations
 - Configuration management with environment variables
