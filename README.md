@@ -22,7 +22,7 @@ Model Context Protocol (MCP) server for controlling GNS3 network topologies thro
 ### 1. Clone the Repository
 
 ```bash
-cd /home/mcj/repos/gns3_over_mcp
+cd <<path>>/gns3_over_mcp
 ```
 
 ### 2. Create Virtual Environment
@@ -77,7 +77,7 @@ Add to `~/.config/Claude/claude_desktop_config.json`:
     "gns3": {
       "command": "python3",
       "args": [
-        "/home/<<user>>/repos/gns3_over_mcp/gns3_mcp_server.py"
+        "/<<path>>/gns3_over_mcp/gns3_mcp_server.py"
       ]
     }
   }
@@ -243,24 +243,6 @@ This allows you to:
 
 3. Verify the template is properly installed in GNS3
 
-## Development
-
-### Running Tests
-
-```bash
-pytest
-```
-
-### Testing the Server Standalone
-
-```bash
-# Activate virtual environment
-source venv/bin/activate
-
-# Run the server
-python3 gns3_mcp_server.py
-```
-
 ### Adding New Tools
 
 1. Add method to `GNS3Client` in [gns3_client.py](gns3_client.py)
@@ -272,13 +254,6 @@ python3 gns3_mcp_server.py
    - Or create a new module in `tools/` for new categories
 3. Register the new tool in the module's `register_*_tools()` function
 4. Update this README with the new tool documentation
-
-## Security Notes
-
-- Never commit `.env` file to version control (already in `.gitignore`)
-- Use strong passwords for remote GNS3 servers
-- Consider using HTTPS for remote connections (`protocol: "https"` in config)
-- Limit network access to GNS3 server to trusted clients
 
 ## Future Enhancements
 
