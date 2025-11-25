@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "gns3": {
+      "command": "python3",
+      "args": [
+        "/home/mcj/repos/gns3_over_mcp/gns3_mcp_server.py"
+      ]
+    }
+  }
+}
