@@ -7,8 +7,6 @@ Model Context Protocol (MCP) server for controlling GNS3 network topologies thro
 - **Project Management**: Create, open, close, delete GNS3 projects
 - **Node Operations**: Add, remove, start, stop network nodes (VMs, routers, switches)
 - **Link Management**: Create and delete connections between nodes
-- **Topology Control**: Start/stop all nodes in a project
-- **Status Monitoring**: Get project statistics and current status
 
 ## Requirements
 
