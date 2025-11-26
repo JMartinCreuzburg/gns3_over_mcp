@@ -22,7 +22,7 @@ Model Context Protocol (MCP) server for controlling GNS3 network topologies thro
 ### 1. Clone the Repository
 
 ```bash
-cd <<path>>/gns3_over_mcp
+git clone https://github.com/JMartinCreuzburg/gns3_over_mcp.git
 ```
 
 ### 2. Create Virtual Environment
