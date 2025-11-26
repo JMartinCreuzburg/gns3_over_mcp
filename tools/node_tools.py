@@ -8,11 +8,11 @@ This module contains all tools related to GNS3 node operations:
 
 from typing import Optional
 from fastmcp import FastMCP
-from config import Config
+from config import GNS3Config
 from gns3_client import GNS3Client, GNS3ClientError
 
 
-def register_node_tools(mcp: FastMCP, config: Config):
+def register_node_tools(mcp: FastMCP, config: GNS3Config):
     """Register all node-related tools with the MCP server."""
 
     @mcp.tool()

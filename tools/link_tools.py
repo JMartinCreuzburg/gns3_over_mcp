@@ -6,11 +6,11 @@ This module contains all tools related to GNS3 link operations:
 """
 
 from fastmcp import FastMCP
-from config import Config
+from config import GNS3Config
 from gns3_client import GNS3Client, GNS3ClientError
 
 
-def register_link_tools(mcp: FastMCP, config: Config):
+def register_link_tools(mcp: FastMCP, config: GNS3Config):
     """Register all link-related tools with the MCP server."""
 
     @mcp.tool()
