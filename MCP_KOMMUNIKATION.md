@@ -6,7 +6,7 @@ Dieses Dokument beschreibt den genauen Kommunikationsablauf des Model Context Pr
 
 ## Beteiligte Komponenten
 
-1. **MCP Host/Client** (z.B. Claude Desktop, Claude Code)
+1. **MCP Client/Client** (z.B. Claude Desktop, Claude Code)
 2. **LLM** (Large Language Model - z.B. Claude)
 3. **MCP Server** (z.B. dein GNS3 MCP Server)
 4. **Backend-Anwendung** (z.B. GNS3 Server)
@@ -16,7 +16,7 @@ Dieses Dokument beschreibt den genauen Kommunikationsablauf des Model Context Pr
 ```
 ┌─────────────┐         ┌─────────────┐         ┌─────────────┐         ┌─────────────┐
 │             │         │             │         │             │         │             │
-│  MCP Host   │◄───────►│     LLM     │         │ MCP Server  │◄───────►│   GNS3      │
+│  MCP Client   │◄───────►│     LLM     │         │ MCP Server  │◄───────►│   GNS3      │
 │  (Claude)   │         │  (Claude)   │         │   (Python)  │         │   Server    │
 │             │         │             │         │             │         │             │
 └─────────────┘         └─────────────┘         └─────────────┘         └─────────────┘
@@ -27,10 +27,10 @@ Dieses Dokument beschreibt den genauen Kommunikationsablauf des Model Context Pr
 
 ## Phase 1: Initialisierung beim Start
 
-### Schritt 1: MCP Host startet MCP Server
+### Schritt 1: MCP Client startet MCP Server
 
 ```
-MCP Host (Claude Code)
+MCP Client (Claude Code)
    │
    ├─→ Liest Konfiguration (claude_code_config.json)
    │   {
@@ -66,7 +66,7 @@ mcp.run()  # Server läuft und wartet auf Requests
 
 ### Schritt 3: Initialize Handshake
 
-**Host → Server:**
+**Client → Server:**
 ```json
 {
   "jsonrpc": "2.0",
@@ -83,7 +83,7 @@ mcp.run()  # Server läuft und wartet auf Requests
 }
 ```
 
-**Server → Host:**
+**Server → Client:**
 ```json
 {
   "jsonrpc": "2.0",
@@ -103,7 +103,7 @@ mcp.run()  # Server läuft und wartet auf Requests
 
 ### Schritt 4: Tools List Request
 
-**Host → Server:**
+**Client → Server:**
 ```json
 {
   "jsonrpc": "2.0",
@@ -112,7 +112,7 @@ mcp.run()  # Server läuft und wartet auf Requests
 }
 ```
 
-**Server → Host:**
+**Server → Client:**
 ```json
 {
   "jsonrpc": "2.0",
@@ -168,14 +168,14 @@ mcp.run()  # Server läuft und wartet auf Requests
           │
           ▼
 ┌──────────────────────────────────────────────────┐
-│ 1. MCP Host empfängt User-Input                  │
+│ 1. MCP Client empfängt User-Input                  │
 │    - Speichert in Konversationshistorie          │
 │    - Bereitet Anfrage an LLM vor                 │
 └──────────────────────────────────────────────────┘
           │
           ▼
 ┌──────────────────────────────────────────────────┐
-│ 2. Host sendet an LLM (API Call):                │
+│ 2. Client sendet an LLM (API Call):                │
 │    {                                              │
 │      "model": "claude-sonnet-4",                  │
 │      "messages": [                                │
@@ -233,7 +233,7 @@ mcp.run()  # Server läuft und wartet auf Requests
           │
           ▼
 ┌──────────────────────────────────────────────────┐
-│ 5. Host empfängt Tool-Call vom LLM               │
+│ 5. Client empfängt Tool-Call vom LLM               │
 │    - Extrahiert: Tool-Name "list_projects"       │
 │    - Extrahiert: Argumente {}                    │
 │    - Bereitet MCP-Request vor                    │
@@ -242,9 +242,9 @@ mcp.run()  # Server läuft und wartet auf Requests
 
 ## Phase 4: MCP Server Tool-Ausführung
 
-### Schritt 6: Host sendet Tool-Call an MCP Server
+### Schritt 6: Client sendet Tool-Call an MCP Server
 
-**Host → Server (über stdio):**
+**Client → Server (über stdio):**
 ```json
 {
   "jsonrpc": "2.0",
@@ -285,7 +285,7 @@ async def list_projects() -> dict:
 # GNS3Client wird initialisiert
 async with GNS3Client(config) as client:
     # config enthält:
-    # - host: "localhost"
+    # - Host: "localhost"
     # - port: 3080
     # - protocol: "http"
     # - auth: falls konfiguriert
@@ -392,7 +392,7 @@ return {
 
 ### Schritt 14: MCP Server sendet JSON-RPC Response
 
-**Server → Host (über stdio):**
+**Server → Client (über stdio):**
 ```json
 {
   "jsonrpc": "2.0",
@@ -418,11 +418,11 @@ return {
 }
 ```
 
-### Schritt 15: Host empfängt Tool-Ergebnis
+### Schritt 15: Client empfängt Tool-Ergebnis
 
 ```
 ┌──────────────────────────────────────────────────┐
-│ MCP Host (Claude Code):                          │
+│ MCP Client (Claude Code):                          │
 │ - Empfängt JSON-RPC Response                     │
 │ - Matched ID 2 mit ursprünglichem Request        │
 │ - Extrahiert "result" Feld                       │
@@ -430,9 +430,9 @@ return {
 └──────────────────────────────────────────────────┘
 ```
 
-### Schritt 16: Host sendet Result zurück an LLM
+### Schritt 16: Client sendet Result zurück an LLM
 
-**Host → LLM (API Call):**
+**Client → LLM (API Call):**
 ```json
 {
   "model": "claude-sonnet-4",
@@ -486,7 +486,7 @@ return {
 
 ### Schritt 18: LLM generiert Antwort
 
-**LLM → Host:**
+**LLM → Client:**
 ```json
 {
   "role": "assistant",
@@ -494,7 +494,7 @@ return {
 }
 ```
 
-### Schritt 19: Host zeigt Antwort dem Benutzer
+### Schritt 19: Client zeigt Antwort dem Benutzer
 
 ```
 ┌──────────────────────────────────────────────────┐
@@ -523,7 +523,7 @@ return {
    "Liste alle GNS3 Projekte auf"
    ↓
 
-2. MCP Host (Claude Code)
+2. MCP Client (Claude Code)
    Empfängt Input, bereitet LLM-Request vor
    ↓
 
@@ -535,7 +535,7 @@ return {
    Tool-Call: list_projects()
    ↓
 
-5. MCP Host
+5. MCP Client
    Empfängt Tool-Call, sendet an MCP Server
    ↓
 
@@ -575,7 +575,7 @@ return {
     JSON-RPC Response mit Result
     ↑ (stdio)
 
-15. MCP Host
+15. MCP Client
     Empfängt Tool-Result
     ↑
 
@@ -587,7 +587,7 @@ return {
     Natürlichsprachige Antwort
     ↑
 
-18. MCP Host
+18. MCP Client
     Zeigt Antwort in UI
     ↑
 
@@ -655,12 +655,12 @@ except GNS3ClientError as e:
 
 - **MCP Server**: Stateless - jeder Request ist unabhängig
 - **LLM (Claude)**: Stateful - behält Konversationshistorie
-- **MCP Host**: Vermittelt zwischen LLM und MCP Server
+- **MCP Client**: Vermittelt zwischen LLM und MCP Server
 - **GNS3 Server**: Stateful - persistiert Projekt-Daten
 
 ### Sicherheit
 
-1. **Lokale Kommunikation**: stdio nur innerhalb desselben Hosts
+1. **Lokale Kommunikation**: stdio nur innerhalb desselben Clients
 2. **Authentifizierung**: Zwischen MCP Server und GNS3 Server
 3. **Keine direkte Internet-Exposition**: MCP Server läuft lokal
 4. **Credential-Management**: Über .env-Dateien
@@ -702,7 +702,7 @@ Alle werden gleichzeitig ausgeführt (asyncio.gather)
 ```
 1. Tool-Call schlägt fehl (z.B. GNS3 nicht erreichbar)
 2. MCP Server sendet Error-Response
-3. Host leitet Error an LLM weiter
+3. Client leitet Error an LLM weiter
 4. LLM erklärt Problem dem User
 5. LLM schlägt Lösung vor (z.B. "GNS3 starten")
 ```
