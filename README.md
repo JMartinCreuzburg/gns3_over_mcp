@@ -8,6 +8,25 @@ Model Context Protocol (MCP) server for controlling GNS3 network topologies thro
 - **Node Operations**: Add, remove, start, stop network nodes (VMs, routers, switches)
 - **Link Management**: Create and delete connections between nodes
 
+## Scope and Limitations
+
+**Important**: This MCP server implements only a subset of GNS3's full functionality. The current implementation focuses on core project management, basic node operations, and link management.
+
+The following GNS3 features are **not yet implemented** and may require future development:
+
+- Console access and terminal integration
+- Advanced node configuration (interface settings, custom properties)
+- Snapshot management (create, restore, list snapshots)
+- Packet capture (PCAP) operations
+- Drawing and annotation tools
+- Image/appliance management
+- Compute node management (distributed GNS3 setups)
+- Project import/export
+- Template creation and modification
+- Advanced filtering and search capabilities
+
+Contributions to extend the functionality are welcome. See the [Future Enhancements](#future-enhancements) section for planned features.
+
 ## Requirements
 
 - Python 3.12.3+
