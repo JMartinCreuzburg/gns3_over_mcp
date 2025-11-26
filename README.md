@@ -211,36 +211,6 @@ This allows you to:
 
 3. For remote servers, ensure authentication is configured in `.env`
 
-### Tool Errors
-
-**Problem**: Tools return error messages
-
-**Solutions**:
-1. Check Claude logs:
-   - Linux: `~/.config/Claude/logs/`
-   - Check for connection errors or API response issues
-
-2. Verify project IDs and node IDs are correct:
-   ```
-   List all projects first to get valid project IDs
-   ```
-
-3. Ensure GNS3 server has necessary permissions and resources
-
-### Template Issues
-
-**Problem**: Cannot create nodes with specific templates
-
-**Solutions**:
-1. List available templates first:
-   ```
-   List all available templates
-   ```
-
-2. Use the correct `template_id` from the templates list
-
-3. Verify the template is properly installed in GNS3
-
 ### Adding New Tools
 
 1. Add method to `GNS3Client` in [gns3_client.py](gns3_client.py)
